@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+    <br><br><br>
+    <div class="container">
+        Hello {{ member.user }}
+        <br><br>
+        {% if request.user.member.profile_pic %}
+            <img src="{{ request.user.member.profile_pic.url }}" width="100px" alt=""> <br> <br>
+        {% endif %}
+        <form method="POST" action="" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form }}
+            <button type="submit">Submit</button>
+        </form>
+        <br> <br>
+        Total workouts: {{ total_workouts }} <br>
+        Workouts in progress: {{ in_progres }} <br>
+        Finished workouts: {{ finished }} <br> <br>
+        <a href="{% url 'workout_form' %}">Add workout</a>
+        <br>
+
+        {% for workout in workouts %}
+            <div class="row">
+                <a href="{% url 'update_workout' workout.id %}">Update workout</a>
+                {{ workout.date_of_working }}<br>
+                {{ workout.name }}<br>
+                {{ workout.status }}<br>
+
+                {% for exercise in workout.exercise.all %}
+                    {{ exercise }}
+                    {{ exercise.content|safe }}
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock content %}
+
+

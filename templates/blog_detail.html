@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="col-md-4 d-flex ftco-animate">
+        <div class="blog-entry justify-content-end">
+            <img src="{{ blog.image.url }}" height="200px" width="200px" alt="">
+            <div class="text p-4 float-right d-block">
+                <div class="meta">
+                    <div><a href="#">{{ blog.timestamp }}</a></div>
+                    <div><a href="#" class="meta-chat"><span class="icon-chat"></span> {{ blog.comments.count }}</a>
+                    </div>
+                </div>
+                <h3 class="heading mt-2"><a href="#">{{ blog.title }}</a></h3>
+                <p>{{ blog.content }}</p>
+            </div>
+        </div>
+    </div> <br>
+
+    {% for comment in blog.get_comments %}
+        {% if request.user.is_staff %}
+            <a href="{% url 'blog:comment_delete' comment.id %}">Delete comment</a>
+        {% endif %}
+        <br>
+        {% if comment.user.member.profile_pic %}
+            <img src="{{ comment.user.member.profile_pic.url }}" width="70px" alt="">
+        {% endif %}
+
+        {{ comment.timestamp|timesince }} ago <br>
+        {{ comment.user.username }} <br>
+        {{ comment.content }} <br>
+
+
+    {% endfor %}
+
+    <br><br>
+    <h2>Leave a comment</h2><br>
+
+    {% if request.user.is_authenticated %}
+        <form method="POST" action="">
+            {% csrf_token %}
+            {{ form }}
+            <button type="submit">Leave a comment</button>
+        </form>
+    {% else %}
+        You need to log in to leave a comment
+    {% endif %}
+{% endblock content %}

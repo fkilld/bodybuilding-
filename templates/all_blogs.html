@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<br><br> <br>
+<div class="row">
+{% for blog in blog_list %}
+<div class="col-md-4 d-flex ftco-animate">
+  <div class="blog-entry justify-content-end">
+    <img src="{{ blog.image.url }}" height="200px" width="200px" alt="">
+    <div class="text p-4 float-right d-block">
+      <div class="meta">
+        <div><a href="#">{{ blog.timestamp }}</a></div>
+        <div><a href="#" class="meta-chat"><span class="icon-chat"></span> {{ blog.comments.count }}</a></div>
+      </div>
+      <h3 class="heading mt-2"><a href="{{ blog.get_absolute_url }}">{{ blog.title }}</a></h3>
+      <p>{{ blog.content|truncatechars:100 }}</p>
+    </div>
+  </div>
+</div>
+
+{% endfor %}
+</div>
+{% endblock content %}
